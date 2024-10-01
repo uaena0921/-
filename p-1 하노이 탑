@@ -1,0 +1,28 @@
+# 코드 1.6: 하노이의 탑
+
+import time
+
+cnt = 0
+
+def hanoi_tower(n, fr, tmp, to) :
+    global cnt
+    if (n == 1) :
+        print("원판 1: %s --> %s" % (fr, to))
+    else :
+        hanoi_tower(n - 1, fr, to, tmp)
+        print("원판 %d: %s --> %s" % (n, fr, to))
+        hanoi_tower(n - 1, tmp, fr, to)
+    cnt += 1
+
+
+
+low = int(input('층 수 입력: '))
+
+start = time.time()
+
+hanoi_tower(low, 'A', 'B', 'C')
+    
+end = time.time()
+
+print("함수 호출 횟수는", cnt)
+print("걸린 시간은", end-start)
