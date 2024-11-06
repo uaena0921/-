@@ -1,0 +1,121 @@
+
+#입력 알고리즘
+def heappush(heap, n) :
+    heap.append(n)	    # 맨 마지막 노드로 일단 삽입
+    i = len(heap)-1	    # 노드 n의 위치
+    while i != 1 :          # n이 루트가 아니면 up-heap 진행
+        pi = i//2           # 부모 노드의 위치
+        if n >= heap[pi]:   # 부모보다 크면 up-heap 종료
+            break
+        heap[i] = heap[pi]	# 부모를 끌어내림
+        i = pi			    # i가 부모의 인덱스가 됨
+    heap[i] = n			    # 마지막 위치에 n 삽입
+
+
+#삭제 알고리즘         
+def heappop(heap) :
+    size = len(heap) - 1    # 노드의 개수
+    if size == 0 :          # 공백상태
+       return None
+
+    root = heap[1]	    # 삭제할 루트 노드(사장)
+    last = heap[size]	    # 마지막 노드(말단사원)
+    pi = 1                  # 부모 노드의 인덱스
+    i = 2                   # 자식 노드의 인덱스
+
+    while (i <= size):	    # 마지막 노드 이전까지
+        if i<size and heap[i] > heap[i+1]:  # right가 더 크면 i를 1 증가 (기본은 왼쪽 노드)
+            i += 1          # 비교할 자식은 오른쪽 자식
+        if last <= heap[i]: # 자식이 더 작으면 down-heap 종료
+            break
+        heap[pi] = heap[i]  # 아니면 down-heap 계속
+        pi = i              
+        i *= 2
+
+    heap[pi] = last	        # 맨 마지막 노드를 parent위치에 복사
+    heap.pop()		        # 맨 마지막 노드 삭제
+    return root			    # 저장해두었던 루트를 반환
+
+
+def huffman_encode(text, h_freq):
+    encoded_text = ""
+    for char in text:
+        encoded_text += h_freq[char]
+    return encoded_text
+
+
+def calculate_compression_rate(original_text, encoded_text):
+ 
+    original_bits = len(original_text) * 8 # 아스키코드가 8비트일 경우
+    encoded_bits = len(encoded_text)
+    
+    # 압축율 계산
+    compression_rate = ((original_bits - encoded_bits) / original_bits) * 100
+    return compression_rate
+
+
+def make_tree(freq):
+    heap = [0]  
+    for n in freq:
+        heappush(heap, n)  
+
+    for i in range(1, len(freq)): 
+        e1 = heappop(heap) 
+        e2 = heappop(heap)  
+        heappush(heap, e1 + e2)
+        print("(%d + %d)" % (e1, e2))  
+
+ 
+
+
+
+#빈도수 순서대로
+label = ['a', 'e', 'h', 'k', 'c', 'o', 't', 'r']
+freq =  [18,15,11,10,7,5,4,2]
+h_freq = {a: '00', e: '01',h: '111',k: '110', c: '1011', o: '1010', t: '100', r: '1110'}
+
+
+#make_tree(freq)
+
+
+
+
+
+while True:
+    text = input("Please enter a word: ")
+    for char in text:
+        if char not in freq:
+            print("illegal character")
+            break
+    else:
+        encoded_text = huffman_encode(text, h_freq)
+        compression_rate = calculate_compression_rate(text, encoded_text)
+        print(f"결과 비트열t: {encoded_text}")
+        print(f"압축률: {compression_rate:.2f}%")
+        break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
