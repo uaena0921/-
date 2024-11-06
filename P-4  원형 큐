@@ -1,0 +1,58 @@
+# 코드 5.1: 배열로 구현된 원형 큐 클래스
+class CircularQueue :
+    def __init__( self, capacity = 10 ) :
+        self.capacity = capacity        # 용량(고정)
+        self.array = [None] * capacity  # 요소들을 저장할 배열
+        self.front = 0                  # 전단의 인덱스
+        self.rear = 0                   # 후단의 인덱스
+
+    def isEmpty( self ) :
+       return self.front == self.rear
+
+    def isFull( self ) :
+       return self.front == (self.rear+1)%self.capacity
+
+    def enqueue( self, item ):
+        if not self.isFull():
+            self.rear = (self.rear + 1) % self.capacity
+            self.array[self.rear] = item
+
+    def dequeue( self ):
+        if not self.isEmpty():
+            self.front = (self.front + 1) % self.capacity
+            return self.array[self.front]
+
+    def peek( self ):
+        if not self.isEmpty():
+            return self.array[(self.front + 1) % self.capacity]
+
+    def print_queue(self):
+        if self.isEmpty():
+            print("출력 결과가 없습니다")
+        else:
+            for i in range(self.front + 1, self.rear + 1):
+                print("[",self.array[i % self.capacity],"]", end="")
+            print()
+
+
+q = CircularQueue(10)
+
+while True :
+    command = input("[메뉴선택] e-삽입, d-삭제, q-종료=> ")
+
+    if command == 'e' :
+        pos = input("  삽입할 단어: ") 
+        q.enqueue(pos)
+        q. print_queue()
+
+        
+    elif command == 'd' :
+        if not q.isEmpty():
+            q.dequeue()
+            q. print_queue()
+        else:
+            print("삭제할 단어가 큐에 존재하지 않습니다")
+
+
+    elif command == 'q' : exit()
+
