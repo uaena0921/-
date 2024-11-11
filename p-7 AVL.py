@@ -15,15 +15,14 @@ def calc_height_diff(n) :
     return calc_height(n.left) - calc_height(n.right)
 
 
-
+'''
 # 코드 9.14: AVL 트리의 LL회전    수정 
 def rotateLL(A) :
     B = A.left
-    if(calc_height(B.left) > calc_height(B.right)):
+    if calc_height_diff( B.left ) > 0 :
         A.left = B.right
         B.right = A
     else:
-        
         A.left = B.left
         B.left = A
     return B
@@ -39,9 +38,19 @@ def rotateRR(A) :
      	A.right = B.right
      	B.right = A   
     return B
+'''
+def rotateLL(A):
+    B = A.left
+    A.left = B.right
+    B.right = A
+    return B
 
 
-
+def rotateRR(A):
+    B = A.right
+    A.right = B.left
+    B.left = A
+    return B
 
 # 코드 9.16: AVL 트리의 RL회전
 def rotateRL(A) :
@@ -90,18 +99,23 @@ def insert_avl(parent, node) :
         print("중복된 키 에러")
 
 
-#@#$%^&*($#
         
 #과제: 삭제 연산 (무조건 최소값)
 
-def delete_min_avl(parent):
-    min_num = parent
-    level = calc_height(parent)
-    for i in range(level):
-        if min_num.left is not None:
-            min_num = min_num.left
-        else:
-            return
+def delete_min_avl(root):
+    if root is None:
+        return None, None  # 트리가 비어 있을 경우
+    
+    # 최소값 삭제: 왼쪽 서브트리가 None인 경우
+    if root.left is None:
+        deleted_key = root.key  # 삭제된 최소값 저장
+        return root.right, deleted_key 
+    
+    # 왼쪽 자식을 탐색하여 최소값을 찾고 삭제
+    root.left, deleted_key = delete_min_avl(root.left)
+    
+    return reBalance(root), deleted_key
+
 
 
 
@@ -124,7 +138,7 @@ def levelorder(root) :
 # 코드 9.20: AVL 트리 테스트 프로그램
 if __name__ == "__main__":
     node = [7,8,9,2,1,5,3,6,4]
-    # node = [0,1,2,3,4,5,6,7,8,9]
+    #node = [3, 4, 5, 1, 2, 1, 7, 9]
 
     root = None
     for i in node :
@@ -141,26 +155,16 @@ if __name__ == "__main__":
     print(" 노드의 개수 =", count_node(root))
     print(" 단말의 개수 =", count_leaf(root))
     print(" 트리의 높이 =", calc_height(root))
-    print("삭제 시작 ^^7")
+    print("삭제 시작")
 
     #delete 위해 추가
-    for i in node:
-        delete_min_avl(root)
-        print("AVL(%d): "%i, end='')
-        levelorder(root)
+    for _ in range(len(node)):
+        root, deleted_key = delete_min_avl(root) 
+        if deleted_key is not None:
+            print(f"삭제된 값: {deleted_key}")
+        print("AVL (삭제 후):", end=' ')
+        if root:  
+            levelorder(root)
+        else:
+            print("트리가 비어 있습니다.")
         print()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
