@@ -105,59 +105,86 @@ def find_spanning_tree(graph, start):
 
 
 
-'''
-vertices = input("vertex : ").split(', ')
-                 
-edges = input("edge : ").split(', ')
-'''
-
-vertices = "A, B, C, D, E, F, G, H".split(', ')
-edges = "A-B, A-C, B-D, C-D, C-E, D-F, E-H, E-G, G-H".split(', ')
-
-
+# 코드 10.10: 깊이우선탐색을 이용한 신장트리
+def ST_DFS(vtx, adj, s, visited) :
+    visited[s] = True               # 현재 정점 s를 visited에 추가함
+    for v in range(len(vtx)) :      # 인접행렬
+        if adj[s][v] != 0 :         # 모든 간선 (s,v)에 대해
+            if visited[v]==False:   # v를 아직 방문하지 않았으면 
+                print("(", vtx[s], vtx[v], ")", end=' ')  # 간선 출력
+                ST_DFS(vtx, adj, v, visited)
 
 
+start_cnt = 0
+
+while True :
+    command = input("[메뉴선택] i-입력, m-매크로, l-리스트 출력, d- DFS, b-BFS,c-연결성분, s-신장트리,  q-종료=> ")
+
+    if command == 'i' :
+        vertices = input("vertex : ").split(', ')
+        edges = input("edge : ").split(', ')
+
+    elif command == 'q' : exit()
+        
+    elif command == 'm':
+        vertices = "A, B, C, D, E, F, G, H".split(', ')
+        edges = "A-B, A-C, B-D, C-D, C-E, D-F, E-H, E-G, G-H".split(', ')
+
+    elif command == 'l':
+        vertex_index = {}
+        index = 0
+        for vertex in vertices:
+            vertex_index[vertex] = index
+            index += 1  
+
+        visited = [False] * len(vertices)
+
+        graph = create_graph(vertices, edges)
+        print("adjacent vertex 리스트")
+        for vertex, neighbors in graph.items():
+            print(f"{vertex}: {neighbors}")
+
+        start_cnt = 1
+
+    elif command == 'd':
+        if start_cnt == 1:
+            print("DFS : ", end='')
+            DFS(vertices,create_matrix(vertices, edges), vertex_index[vertices[0]], visited)
+            print(end='\n')
+
+        else:
+            print("I를 먼저 입력하세요")
 
 
-vertex_index = {}
-index = 0
-for vertex in vertices:
-    vertex_index[vertex] = index
-    index += 1  
+    elif command == 'b':
+        if start_cnt == 1:
+            print("BFS : ", end='')
+            BFS_AL(vertices, create_matrix(vertices, edges), 0)
+            print(end='\n')
+        else:
+            print("I를 먼저 입력하세요")
 
-visited = [False] * len(vertices)
+    elif command == 'c':
+        if start_cnt == 1:
+            colorGroup = find_connected_component(vertices, create_matrix(vertices, edges))
+            print("연결성분 개수 = %d " % len(colorGroup))
+            print(colorGroup)
+        else:
+            print("I를 먼저 입력하세요")
 
-graph = create_graph(vertices, edges)
+            
+    elif command == 's':
+        if start_cnt == 1:
+            print('신장트리(DFS): ', end="")
+            ST_DFS(vertices, create_matrix(vertices, edges), 0, [False]*len(vertices))
+            print()
+        else:
+            print("I를 먼저 입력하세요")
 
-for vertex, neighbors in graph.items():
-    print(f"{vertex}: {neighbors}")
-
-print("DFS : ", end='')
-DFS(vertices,create_matrix(vertices, edges), vertex_index[vertices[0]], visited)
-print(end='\n')
-print("BFS : ", end='')
-BFS_AL(vertices, create_matrix(vertices, edges), 0)
-print(end='\n')
-
-colorGroup = find_connected_component(vertices, create_matrix(vertices, edges))
-
-
-print("연결성분 개수 = %d " % len(colorGroup))
-
-print(colorGroup)	# 정점 리스트들을 출력
-
-spanning_tree = find_spanning_tree(graph, vertex_index['A'])
-print("Spanning tree edges:", spanning_tree)
-
-
-
-
-
-
-
-
-
-
+    else :
+        print("없는 커맨드입니다")
+    print("==========================================")
+              
 
 
 
