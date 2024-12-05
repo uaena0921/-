@@ -126,10 +126,6 @@ def bubble_sort(A) :
                 print(A)
 
         if not bChanged:
-            print()
-            print('Sorted : ',A)
-            print('Number of comparisions :', num_com)
-            print('Number of swap :', swap)
             break;			
 
 
@@ -355,6 +351,7 @@ while True :
         
     elif command == 'b' :
         bubble_sort(data_list)
+        print_result(data_list)
         
     elif command == 'h' :
         heapSort(data_list)
