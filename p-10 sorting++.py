@@ -14,7 +14,7 @@ def dataReset():
 
 def print_result(data_list):
     global num_data
-    global num_com    
+    global num_com
     global swap
     print('Sorted : ', data_list)
     print('Number of comparisions :', num_com)
@@ -257,36 +257,33 @@ def quick_sort(A, left, right):
 def partition(A, left, right):
     global num_data
     global num_com
-
+    global swap
+    
     low = left + 1
     high = right
     pivot = A[left]  # 피벗 설정
-    num_data += 1    # 피벗 설정도 데이터 이동으로 간주
 
     while low <= high:  # low와 high가 역전되지 않는 한 반복
         # 피벗보다 작은 값을 찾는 과정
         while low <= right and A[low] < pivot:
             num_com += 1  # 비교 발생
             low += 1
-        num_com += 1  # 마지막 조건 확인 비교
 
         # 피벗보다 큰 값을 찾는 과정
         while high >= left and A[high] > pivot:
             num_com += 1  # 비교 발생
             high -= 1
-        num_com += 1  # 마지막 조건 확인 비교
 
         # low와 high가 엇갈리지 않았을 때 교환
         if low < high:
             A[low], A[high] = A[high], A[low]
-            num_data += 2  # 교환 발생
+            swap += 1  # 교환 발생
 
     # 피벗과 high를 교환
     A[left], A[high] = A[high], A[left]
-    num_data += 2  # 교환 발생
+    swap += 1  # 교환 발생
 
     return high
-
 
 
 
@@ -303,7 +300,8 @@ DIGITS  = 4
 def radix_sort(A):
     global num_data
     global num_com
-    
+    DIGITS  = int(input("리스트의 최대 자리수 ="))
+
     queues = []
     for i in range(BUCKETS):
         queues.append(Queue())
@@ -323,11 +321,9 @@ def radix_sort(A):
         
         for b in range(BUCKETS):
             while not queues[b].empty():
-                num_com += 1  # while 조건 확인 비교
                 A[i] = queues[b].get()
                 num_data += 1  # 데이터 이동: 큐 -> A[i]
                 i += 1
-        num_com += BUCKETS  # 각 버킷의 while 조건 마지막 확인
 
         factor *= 10  # 다음 자릿수로 이동		
 
@@ -345,7 +341,7 @@ while True :
         data_list = [5, 8, 1, 3, 4]
 
     elif command == '1' :
-        data_list = input("데이터 리스트를 입력하세요:").split(', ')
+        data_list = [*map(int, input("데이터 리스트를 입력하세요:").split(', '))]
 
 
     elif command == 'S' :
